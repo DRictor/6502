@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2 Final//EN">
+<HTML>
+<HEAD>
+<META HTTP-EQUIV="Content-Type" Content="text/html; charset=Windows-1252">
+<TITLE>_Opcode Mode Table</TITLE>
+</HEAD>
+
+<BODY BGCOLOR="#FFFFFF" TEXT="#000000">
+
+<OBJECT TYPE="application/x-oleobject" CLASSID="clsid:1e2a7bd0-dab9-11d0-b93a-00c04fc99f9e">
+	<PARAM NAME="Keyword" VALUE="Processor Instructions">
+	<PARAM NAME="Keyword" VALUE="Processor Instructions, _Opcode Mode Table">
+</OBJECT>
+
+<P><A NAME="opcode_table"></A>Modes for addressing 6502 processor commands and corresponding codes.</P>
+
+<P>Note:  Opcodes in Red are 65C02 only opcodes</P>
+
+<PRE><CODE>    Imp  Acc  Imm  ZPG  Abs  ABSX  ABSY  ZPGX  ZPGY  Rel  ZPGI  ZPGIX  ZPGIY  ABSI  ABSIX
+  
+LDA  -    -   $A9  $A5  $AD  $BD   $B9   $B5    -     -   $B2    $A1    $B1    -     -     LDA
+LDX  -    -   $A2  $A6  $AE   -    $BE    -    $B6    -    -      -      -     -     -     LDX
+LDY  -    -   $A0  $A4  $AC  $BC    -    $B4    -     -    -      -      -     -     -     LDY
+STA  -    -    -   $85  $8D  $9D   $99   $95    -     -   $92    $81    $91    -     -     STA
+STX  -    -    -   $86  $8E   -     -     -    $96    -    -      -      -     -     -     STX
+STY  -    -    -   $84  $8C   -     -    $94   -      -    -      -      -     -     -     JAN
+STZ  -    -    -   $64  $9C  $9E    -    $74   -      -    -      -      -     -     -     STZ
+TAX $AA   -    -    -    -    -     -     -    -      -    -      -      -     -     -     TAX
+TXA $8A   -    -    -    -    -     -     -    -      -    -      -      -     -     -     TXA
+TAY $A8   -    -    -    -    -     -     -    -      -    -      -      -     -     -     TAY
+TYA $98   -    -    -    -    -     -     -    -      -    -      -      -     -     -     TYA
+TXS $9A   -    -    -    -    -     -     -    -      -    -      -      -     -     -     TXS
+TSX $BA   -    -    -    -    -     -     -    -      -    -      -      -     -     -     TSX
+ADC  -    -   $69  $65  $6D  $7D   $79   $75   -      -   $72    $61    $71    -     -     ADC
+SBC  -    -   $E9  $E5  $ED  $FD   $F9   $F5   -      -   $F2    $E1    $F1    -     -     SBC
+CMP  -    -   $C9  $C5  $CD  $DD   $D9   $D5   -      -   $D2    $C1    $D1    -     -     CMP
+CPX  -    -   $E0  $E4  $EC   -     -     -    -      -    -      -      -     -     -     CPX
+CPY  -    -   $C0  $C4  $CC   -     -     -    -      -    -      -      -     -     -     CPY
+INC  -    -    -   $E6  $EE  $FE    -    $F6   -      -    -      -      -     -     -     INC
+DEC  -    -    -   $C6  $CE  $DE    -    $D6   -      -    -      -      -     -     -     DEC
+INA $1A   -    -    -    -    -     -     -    -      -    -      -      -     -     -     INA
+DEA $3A   -    -    -    -    -     -     -    -      -    -      -      -     -     -     DEA
+INX $E8   -    -    -    -    -     -     -    -      -    -      -      -     -     -     INX
+DEX $CA   -    -    -    -    -     -     -    -      -    -      -      -     -     -     DEX
+INY $C8   -    -    -    -    -     -     -    -      -    -      -      -     -     -     INS
+DEY $88   -    -    -    -    -     -     -    -      -    -      -      -     -     -     DEY
+ASL  -   $0A   -   $06  $0E  $1E    -    $16   -      -    -      -      -     -     -     ASL
+LSR  -   $4A   -   $46  $4E  $5E    -    $56   -      -    -      -      -     -     -     LDS
+ROL  -   $2A   -   $26  $2E  $3E    -    $36   -      -    -      -      -     -     -     ROL
+ROR  -   $6A   -   $66  $6E  $7E    -    $76   -      -    -      -      -     -     -     ROR
+AND  -    -   $29  $25  $2D  $3D   $39   $35   -      -   $32    $21    $31    -     -     AND
+ORA  -    -   $09  $05  $0D  $1D   $19   $15   -      -   $12    $01    $11    -     -     ORA
+EOR  -    -   $49  $45  $4D  $5D   $59   $55   -      -   $52    $41    $51    -     -     EOR
+BIT  -    -   $89  $24  $2C  $3C    -    $34   -      -    -      -      -     -     -     BIT
+TSB  -    -    -   $04  $0C   -     -     -    -      -    -      -      -     -     -     TSB
+TRB  -    -    -   $14  $1C   -     -     -    -      -    -      -      -     -     -     TRB
+JMP  -    -    -    -   $4C   -     -     -    -      -    -      -      -    $6C   $7C    JMP
+JSR  -    -    -    -   $20   -     -     -    -      -    -      -      -     -     -     JSR
+BRK $00   -    -    -    -    -     -     -    -      -    -      -      -     -     -     BRK
+BRA  -    -    -    -    -    -     -     -    -     $80   -      -      -     -     -     BRA
+BPL  -    -    -    -    -    -     -     -    -     $10   -      -      -     -     -     BPL
+BMI  -    -    -    -    -    -     -     -    -     $30   -      -      -     -     -     BMI
+BVC  -    -    -    -    -    -     -     -    -     $50   -      -      -     -     -     BVC
+BVS  -    -    -    -    -    -     -     -    -     $70   -      -      -     -     -     BVS
+BCC  -    -    -    -    -    -     -     -    -     $90   -      -      -     -     -     BCC
+BCS  -    -    -    -    -    -     -     -    -     $B0   -      -      -     -     -     BCS
+BNE  -    -    -    -    -    -     -     -    -     $D0   -      -      -     -     -     BNE
+BEQ  -    -    -    -    -    -     -     -    -     $F0   -      -      -     -     -     BEQ
+RTS $60   -    -    -    -    -     -     -    -      -    -      -      -     -     -     RTS
+RTI $40   -    -    -    -    -     -     -    -      -    -      -      -     -     -     RTI
+PHA $48   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PHA
+PLA $68   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PLA
+PHX $DA   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PHX
+PLX $FA   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PLX
+PHY $5A   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PHY
+PLY $7A   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PLY
+PHP $08   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PHP
+PLP $28   -    -    -    -    -     -     -    -      -    -      -      -     -     -     PLP
+CLC $18   -    -    -    -    -     -     -    -      -    -      -      -     -     -     CLC
+SEC $38   -    -    -    -    -     -     -    -      -    -      -      -     -     -     SEC
+CLV $B8   -    -    -    -    -     -     -    -      -    -      -      -     -     -     CLV
+CLD $D8   -    -    -    -    -     -     -    -      -    -      -      -     -     -     CLD
+SED $F8   -    -    -    -    -     -     -    -      -    -      -      -     -     -     SED
+CLI $58   -    -    -    -    -     -     -    -      -    -      -      -     -     -     CLI
+SEI $78   -    -    -    -    -     -     -    -      -    -      -      -     -     -     SEI
+NOP $EA   -    -    -    -    -     -     -    -      -    -      -      -     -     -     NOP</CODE></PRE>
+
+<P>Explanations of abbreviations:</P>
+
+<table>
+
+<tr><td><b>Addressing &nbsp; </b></td><td><b>Description of addressing</b></td><td><b>Example</b></td></tr>
+<tr><td>Imp</td><td>Implied</td><td>CLC</td></tr>
+<tr><td>Acc</td><td>Accumulator</td><td>ROR</td></tr>
+<tr><td>Imm</td><td>Immediate</td><td>LDA #0</td></tr>
+<tr><td>ZPG</td><td>Zero page</td><td>STA $FE</td></tr>
+<tr><td>Abs</td><td>Absolute</td><td>STX $E000</td></tr>
+<tr><td>ABSX</td><td>Absolute indexed by X</td><td>ADC $4004, X</td></tr>
+<tr><td>ABSY</td><td>Absolute indexed by Y</td><td>SBC $8008, Y</td></tr>
+<tr><td>ZPGX</td><td>Zero page indexed by X</td><td>LDY $A0, X</td></tr>
+<tr><td>ZPGY</td><td>Zero page indexed by Y</td><td>STX $E0, Y</td></tr>
+<tr><td>Rel</td><td>Relative</td><td>BNE .loop</td></tr>
+<tr><td>ZPGI</td><td>Indirect zero page (65C02 only)</td><td>ADC ($08)</td></tr>
+<tr><td>ZPGIX</td><td>Zero page indirect pre-indexed by X</td><td>ORA ($C2,X)</td></tr>
+<tr><td>ZPGIY</td><td>Zero page indirect post-indexed by Y</td><td>AND ($A5),Y</td></tr>
+<tr><td>ABSI</td><td>Absolute indirect</td><td>JMP ($E120)</td></tr>
+<tr><td>ABSIX</td><td>Absolute indirect indexed by X (only 65C02) &nbsp; </td><td>JMP ($123E, X)</td></tr>
+</table>
+
+</BODY>
+</HTML>
