@@ -205,25 +205,25 @@ const UINT8 CAsm::code_to_mode[]=
   A_REL, A_ZPGI_Y, A_ILL, A_ILL, A_ILL,  A_ZPG_X, A_ZPG_X, A_ILL, A_IMP, A_ABS_Y, A_ILL, A_ILL, A_ILL,  A_ABS_X, A_ABS_X, A_ILL
 };
 
-  // j.w. dla 65c02
+  //% bug fix 1.2.13.2 - 65c02 code to mode table - added unused opcode addressing modes to allow simulation
 const UINT8 CAsm::code_to_mode_c[]=
 {// x0     x1	     x2     x3     x4      x5       x6       x7      x8     x9       xA     xB     xC       xD 	     xE       xF
-  A_IMP2,A_ZPGI_X, A_ILL,  A_ILL, A_ZPG,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_ILL, A_ABS,   A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ZPG,  A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_ACC, A_ILL, A_ABS,   A_ABS_X, A_ABS_X, A_ZREL,
-  A_ABS, A_ZPGI_X, A_ILL,  A_ILL, A_ZPG,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_ILL, A_ABS,   A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ZPG_X,A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_ACC, A_ILL, A_ABS_X, A_ABS_X, A_ABS_X, A_ZREL,
-  A_IMP, A_ZPGI_X, A_ILL,  A_ILL, A_ILL,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_ILL, A_ABS,   A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ILL,  A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_ILL, A_ILL,   A_ABS_X, A_ABS_X, A_ZREL,
-  A_IMP, A_ZPGI_X, A_ILL,  A_ILL, A_ZPG,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_ILL, A_ABSI,  A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ZPG_X,A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_ILL, A_ABSI_X,A_ABS_X, A_ABS_X, A_ZREL,
-  A_REL, A_ZPGI_X, A_ILL,  A_ILL, A_ZPG,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_ILL, A_ABS,   A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ZPG_X,A_ZPG_X, A_ZPG_Y, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_ILL, A_ABS,   A_ABS_X, A_ABS_X, A_ZREL,
-  A_IMM, A_ZPGI_X, A_IMM,  A_ILL, A_ZPG,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_ILL, A_ABS,   A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ZPG_X,A_ZPG_X, A_ZPG_Y, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_ILL, A_ABS_X, A_ABS_X, A_ABS_Y, A_ZREL,
-  A_IMM, A_ZPGI_X, A_ILL,  A_ILL, A_ZPG,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_ILL, A_ABS,   A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ILL,  A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_ILL, A_ILL,   A_ABS_X, A_ABS_X, A_ZREL,
-  A_IMM, A_ZPGI_X, A_ILL,  A_ILL, A_ZPG,  A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_ILL, A_ABS,   A_ABS,   A_ABS,   A_ZREL,
-  A_REL, A_ZPGI_Y, A_ZPGI, A_ILL, A_ILL,  A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_ILL, A_ILL,   A_ABS_X, A_ABS_X, A_ZREL
+  A_IMP2,A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_IMP, A_ABS,   A_ABS,   A_ABS,   A_ZREL,  // 0x 
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG,   A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_ACC, A_IMP, A_ABS,   A_ABS_X, A_ABS_X, A_ZREL,  // 1x
+  A_ABS, A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_IMP, A_ABS,   A_ABS,   A_ABS,   A_ZREL,  // 2x
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG_X, A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_ACC, A_IMP, A_ABS_X, A_ABS_X, A_ABS_X, A_ZREL,  // 3x
+  A_IMP, A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_IMP, A_ABS,   A_ABS,   A_ABS,   A_ZREL,  // 4x
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG_X, A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_IMP, A_ABS,   A_ABS_X, A_ABS_X, A_ZREL,  // 5x
+  A_IMP, A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_ACC, A_IMP, A_ABSI,  A_ABS,   A_ABS,   A_ZREL,  // 6x
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG_X, A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_IMP, A_ABSI_X,A_ABS_X, A_ABS_X, A_ZREL,  // 7x
+  A_REL, A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_IMP, A_ABS,   A_ABS,   A_ABS,   A_ZREL,  // 8x
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG_X, A_ZPG_X, A_ZPG_Y, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_IMP, A_ABS,   A_ABS_X, A_ABS_X, A_ZREL,  // 9x
+  A_IMM, A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_IMP, A_ABS,   A_ABS,   A_ABS,   A_ZREL,  // Ax
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG_X, A_ZPG_X, A_ZPG_Y, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_IMP, A_ABS_X, A_ABS_X, A_ABS_Y, A_ZREL,  // Bx
+  A_IMM, A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_IMP, A_ABS,   A_ABS,   A_ABS,   A_ZREL,  // Cx
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG_X, A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_IMP, A_ABS,   A_ABS_X, A_ABS_X, A_ZREL,  // Dx
+  A_IMM, A_ZPGI_X, A_IMM,  A_IMP, A_ZPG,   A_ZPG,   A_ZPG,   A_ZPG2, A_IMP, A_IMM,   A_IMP, A_IMP, A_ABS,   A_ABS,   A_ABS,   A_ZREL,  // Ex
+  A_REL, A_ZPGI_Y, A_ZPGI, A_IMP, A_ZPG_X, A_ZPG_X, A_ZPG_X, A_ZPG2, A_IMP, A_ABS_Y, A_IMP, A_IMP, A_ABS,   A_ABS_X, A_ABS_X, A_ZREL   // Fx
 };
 
 
@@ -304,45 +304,48 @@ const UINT8 CAsm::mode_to_len[]=	// zamiana trybu adresowania na d³ugoœæ rozkazu
 };
 
 
+//% bug fix 1.2.13.1 - This timing table updated by Daryl Rictor
 const UINT8 CAsm::code_cycles[256]=
 {
 //0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
   7, 6, 0, 0, 0, 3, 5, 0, 3, 2, 2, 0, 0, 4, 6, 0,   // 0x
-  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 5, 7, 0,   // 1x
+  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 4, 7, 0,   // 1x
   6, 6, 0, 0, 3, 3, 5, 0, 4, 2, 2, 0, 4, 4, 6, 0,   // 2x
-  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 5, 7, 0,   // 3x
+  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 4, 7, 0,   // 3x
   6, 6, 0, 0, 0, 3, 5, 0, 3, 2, 2, 0, 3, 4, 6, 0,   // 4x
-  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 5, 7, 0,   // 5x
+  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 4, 7, 0,   // 5x
   6, 6, 0, 0, 0, 3, 5, 0, 4, 2, 2, 0, 5, 4, 6, 0,   // 6x
-  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 5, 7, 0,   // 7x
-  0, 6, 0, 0, 3, 3, 3, 0, 2, 0, 2, 0, 4, 4, 4, 0,   // 8x
+  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 4, 7, 0,   // 7x
+  0, 6, 0, 0, 3, 3, 3, 0, 2, 2, 2, 0, 4, 4, 4, 0,   // 8x
   2, 6, 0, 0, 4, 4, 4, 0, 2, 5, 2, 0, 0, 5, 0, 0,   // 9x
   2, 6, 2, 0, 3, 3, 3, 0, 2, 2, 2, 0, 4, 4, 4, 0,   // ax
   2, 5, 0, 0, 4, 4, 4, 0, 2, 4, 2, 0, 4, 4, 4, 0,   // bx
   2, 6, 0, 0, 3, 3, 5, 0, 2, 2, 2, 0, 4, 4, 6, 0,   // cx
-  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 5, 7, 0,   // dx
+  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 4, 7, 0,   // dx
   2, 6, 0, 0, 3, 3, 5, 0, 2, 2, 2, 0, 4, 4, 6, 0,   // ex
-  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 5, 7, 0    // fx
+  2, 5, 0, 0, 0, 4, 6, 0, 2, 4, 0, 0, 0, 4, 7, 0    // fx
 };
+
+//% bug fix 1.2.13.1 - This timing table updated by Daryl Rictor
 const UINT8 CAsm::code_cycles_c[256]=
 {
 //0  1  2  3  4  5  6  7  8  9  a  b  c  d  e  f
-  7, 6, 0, 0, 3, 3, 5, 0, 3, 2, 2, 0, 6, 4, 6, 0,   // 0x
-  2, 5, 2, 0, 4, 4, 6, 0, 2, 4, 2, 0, 6, 5, 7, 0,   // 1x
-  6, 6, 0, 0, 3, 3, 5, 0, 4, 2, 2, 0, 4, 4, 6, 0,   // 2x
-  2, 5, 2, 0, 4, 4, 6, 0, 2, 4, 2, 0, 5, 5, 7, 0,   // 3x
-  6, 6, 0, 0, 0, 3, 5, 0, 3, 2, 2, 0, 3, 4, 6, 0,   // 4x
-  2, 5, 2, 0, 0, 4, 6, 0, 2, 4, 2, 0, 0, 5, 7, 0,   // 5x
-  6, 6, 0, 0, 3, 3, 5, 0, 4, 2, 2, 0, 5, 4, 6, 0,   // 6x
-  2, 5, 2, 0, 4, 4, 6, 0, 2, 4, 2, 0, 6, 5, 7, 0,   // 7x
-  2, 6, 0, 0, 3, 3, 3, 0, 2, 2, 2, 0, 4, 4, 4, 0,   // 8x
-  2, 6, 2, 0, 4, 4, 4, 0, 2, 5, 2, 0, 5, 5, 5, 0,   // 9x
-  2, 6, 2, 0, 3, 3, 3, 0, 2, 2, 2, 0, 4, 4, 4, 0,   // ax
-  2, 5, 2, 0, 4, 4, 4, 0, 2, 4, 2, 0, 4, 4, 4, 0,   // bx
-  2, 6, 0, 0, 3, 3, 5, 0, 2, 2, 2, 0, 4, 4, 6, 0,   // cx
-  2, 5, 2, 0, 0, 4, 6, 0, 2, 4, 2, 0, 0, 5, 7, 0,   // dx
-  2, 6, 0, 0, 3, 3, 5, 0, 2, 2, 2, 0, 4, 4, 6, 0,   // ex
-  2, 5, 2, 0, 0, 4, 6, 0, 2, 4, 2, 0, 0, 5, 7, 0    // fx
+  7, 6, 2, 1, 5, 3, 5, 5, 3, 2, 2, 1, 6, 4, 6, 5,   // 0
+  2, 5, 5, 1, 5, 4, 6, 5, 2, 4, 2, 1, 6, 4, 6, 5,	// 1x   
+  6, 6, 2, 1, 3, 3, 5, 5, 4, 2, 2, 1, 4, 4, 6, 5,	// 2x
+  2, 5, 5, 1, 4, 4, 6, 5, 2, 4, 2, 1, 4, 4, 6, 5,	// 3x
+  6, 6, 2, 1, 3, 3, 5, 5, 3, 2, 2, 1, 3, 4, 6, 5,	// 4x
+  2, 5, 5, 1, 4, 4, 6, 5, 2, 4, 3, 1, 8, 4, 6, 5,	// 5x
+  6, 6, 2, 1, 3, 3, 5, 5, 4, 2, 2, 1, 6, 4, 6, 5,	// 6x
+  2, 5, 5, 1, 4, 4, 6, 5, 2, 4, 4, 1, 6, 4, 6, 5,	// 7x
+  2, 6, 2, 1, 3, 3, 3, 5, 2, 2, 2, 1, 4, 4, 4, 5,	// 8x
+  2, 6, 5, 1, 4, 4, 4, 5, 2, 5, 2, 1, 4, 5, 5, 5,	// 9x
+  2, 6, 2, 1, 3, 3, 3, 5, 2, 2, 2, 1, 4, 4, 4, 5,	// ax
+  2, 5, 5, 1, 4, 4, 4, 5, 2, 4, 2, 1, 4, 4, 4, 5,	// bx
+  2, 6, 2, 1, 3, 3, 5, 5, 2, 2, 2, 1, 4, 4, 6, 5,	// cx
+  2, 5, 5, 1, 4, 4, 6, 5, 2, 4, 3, 1, 4, 4, 7, 5,	// dx
+  2, 6, 2, 1, 3, 3, 5, 5, 2, 2, 2, 1, 4, 4, 6, 5,	// ex
+  2, 5, 5, 1, 4, 4, 6, 5, 2, 4, 4, 1, 4, 4, 7, 5	// fx
 };
 
 
@@ -350,7 +353,6 @@ extern C6502App theApp;
 
 const UINT8 (&CAsm::TransformTable(const bool bProc6502))[C_ILL][A_NO_OF_MODES]
 {
-//  return theApp.m_global.m_bProc6502 ? trans_table : trans_table_c;
   if (bProc6502)
     return trans_table;
   else
@@ -368,7 +370,6 @@ const UINT8 (&CAsm::CodeToCommand(const bool bProc6502))[0x100]
     return code_to_command;
   else
     return code_to_command_c;
-//  return theApp.m_global.m_bProc6502 != FALSE ? code_to_command : code_to_command_c;
 }
 
 

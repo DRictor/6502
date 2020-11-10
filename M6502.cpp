@@ -401,23 +401,37 @@ CLeksem CAsm6502::next_leks(bool nospace)		// pobranie kolejnego symbolu
 		return get_hex_num();
 	else if (c=='@')		// liczba bin?
 		return get_bin_num();
-	else if (_istalpha(c) || c=='_' || c=='.' || c=='?' || c=='$')
+	else if (_istalpha(c) || c=='_' || c=='.' || c=='?') // || c=='$') - this is dead, cannot get here due to 4 lines above
 	{
 		ptr--;
 		//const CLeksem &leks=
 		CLeksem::CLString* pStr= get_ident();
 		if (pStr == NULL)
 			return CLeksem(CLeksem::ERR_BAD_CHR);
-//		if (c=='.')				// to mo¿e byæ dyrektywa
 
+		//% Bug Fix 1.2.12.18 - .commands commented out 
 		OpCode code;
 		InstrType it;
-		if (asm_instr(*pStr,it))
+
+		if (c=='.')				// to mo¿e byæ dyrektywa
 		{
-			delete pStr;
-			return CLeksem(it);
+			if (asm_instr(*pStr,it))  // only need to do this if c='.'
+			{
+				if (it == CAsm::I_DB) //***
+                {
+					delete pStr;
+                    return CLeksem(it);
+                }
+                else
+                {
+					delete pStr;
+                    return CLeksem(it);
+                }
+			}
 		}
-		else if (pStr->GetLength()==3 && proc_instr(*pStr, code))	// to mo¿e byæ instrukcja
+
+		if (pStr->GetLength()==3 && proc_instr(*pStr, code))	// to mo¿e byæ instrukcja
+		// end bug fix
 		{
 			delete pStr;
 			return CLeksem(code);
@@ -912,11 +926,12 @@ int __cdecl CAsm6502::asm_str_key_cmp(const void *elem1, const void *elem2)
 
 bool CAsm6502::asm_instr(const CString &str, InstrType &it)
 {				// spr. czy 'str' jest dyrektyw¹ asemblera
+	//% Bug Fix 1.2.12.18 - .commands commented out
 	static const ASM_STR_KEY instr[]=
 	{		// dyrektywy asemblera w porz¹dku alfabetycznym
 		".ASCII",	I_DB,		// def byte
 		".ASCIS",	I_ASCIS,	// ascii + $80 ostatni bajt
-		//".BYTE",	I_DB,
+		".BYTE",	I_DB,
 		".DB",		I_DB,		// def byte
 		".DBYTE",	I_DD,		// def double byte
 		".DCB",		I_DCB,		// declare block
@@ -929,7 +944,7 @@ bool CAsm6502::asm_instr(const CString &str, InstrType &it)
 		".ENDM",	I_ENDM,		// koniec .MACRO
 		".ENDR",	I_ENDR,		// koniec .REPEAT
 		".EQU",		I_SET,		// przypisanie wartoœci
-		".ERRORX",	I_ERROR,	// zg³oszenie b³êdu
+		".ERROR",	I_ERROR,	// zg³oszenie b³êdu
 		".EXITM",	I_EXITM,	// zakoñczenie rozwijania makra
 		".IF",		I_IF,		// asemblacja warunkowa
 		".INCLUDE",	I_INCLUDE,	// w³¹czenie pliku do asemblacji
@@ -941,16 +956,18 @@ bool CAsm6502::asm_instr(const CString &str, InstrType &it)
 		".REPT",	I_REPEAT,
 		".ROM_AREA",I_ROM_AREA,	// protected memory area
 		".RS",		I_RS,		// reserve space
-		//".SET",		I_SET,		// przypisanie wartoœci
-		//".START",	I_START,	// pocz¹tek programu (dla symulatora)
+		".SET",		I_SET,		// przypisanie wartoœci
+		".START",	I_START,	// pocz¹tek programu (dla symulatora)
 		".STR",		I_DS,		// def string
-		//".STRING",	I_DS,		// def string
+		".STRING",	I_DS,		// def string
 		".WORD",	I_DW
 	};
 
+	//% Bug Fix 1.2.12.18 - .commands commented out - next_leks changed back to only come here if 1st char is '.'
 	ASM_STR_KEY find;
-	CString temp = str[0] == '.' ? str : "." + (str[0] == '$' ? str.Right(str.GetLength() - 1) : str);
-	find.str = temp;
+	//CString temp = str[0] == '.' ? str : "." + (str[0] == '$' ? str.Right(str.GetLength() - 1) : str);
+	find.str = str;
+	// end bug fix
 
 	void *ret= bsearch(&find, instr, sizeof instr / sizeof(ASM_STR_KEY), 
 		sizeof(ASM_STR_KEY), asm_str_key_cmp);
@@ -3306,7 +3323,9 @@ CAsm6502::Stat CAsm6502::def_ident(const CString &id, CIdent &inf)
 			if (!macro_ident.replace(format_local_label(ident,macro_local_area),inf))
 				return err_ident=ident, ERR_LABEL_REDEF;	// ju¿ zdefiniowana
 		}
-		else if (!proc_local_ident.replace(format_local_label(ident, proc_area), inf))
+		//% Bug Fix 1.2.13.1 - fix local labels causing duplicate label errors 
+		//else if (!proc_local_ident.replace(format_local_label(ident, proc_area), inf))
+		else if ((ident[1]==LOCAL_LABEL_CHAR) & !proc_local_ident.replace(format_local_label(ident, proc_area), inf))
 			return err_ident = ident, ERR_LABEL_REDEF;	// ju¿ zdefiniowana
 		else if (!local_ident.replace(format_local_label(ident, local_area), inf))
 			return err_ident = ident, ERR_LABEL_REDEF;	// ju¿ zdefiniowana
@@ -4320,7 +4339,9 @@ void CAsm6502::CListing::NextLine()
 		m_File.WriteString(m_Str);
 	}
 	m_nLine++;
-	m_Str.Format(_T("%05d    "), m_nLine);
+	//% Bug Fix 1.2.13.2 - remove extra space from list report
+	//m_Str.Format(_T("%05d    "), m_nLine);
+	m_Str.Format(_T("%05d  "), m_nLine);
 }
 
 
@@ -4328,14 +4349,19 @@ void CAsm6502::CListing::AddCodeBytes(UINT16 addr, int code1/*= -1*/, int code2/
 {
 	ASSERT(m_nLine != -1);	// plik musi byæ otwarty
 	TCHAR buf[32];
+	//% Bug Fix 1.2.13.2 - remove extra space from list report
 	if (code3 != -1)
-		wsprintf(buf,_T("%04X  %02X %02X %02X     "),(int)addr,(int)code1,code2,code3);
+	//	wsprintf(buf,_T("%04X  %02X %02X %02X     "),(int)addr,(int)code1,code2,code3);
+		wsprintf(buf,_T("%04X  %02X %02X %02X  "),(int)addr,(int)code1,code2,code3);
 	else if (code2 != -1)
-		wsprintf(buf,_T("%04X  %02X %02X        "),(int)addr,(int)code1,code2);
+	//	wsprintf(buf,_T("%04X  %02X %02X        "),(int)addr,(int)code1,code2);
+		wsprintf(buf,_T("%04X  %02X %02X     "),(int)addr,(int)code1,code2);
 	else if (code1 != -1)
-		wsprintf(buf,_T("%04X  %02X           "),(int)addr,(int)code1);
+	//	wsprintf(buf,_T("%04X  %02X           "),(int)addr,(int)code1);
+		wsprintf(buf,_T("%04X  %02X        "),(int)addr,(int)code1);
 	else
-		wsprintf(buf,_T("%04X               "),(int)addr);
+	//	wsprintf(buf,_T("%04X               "),(int)addr);
+		wsprintf(buf,_T("%04X            "),(int)addr);
 	m_Str += buf;
 }
 
@@ -4344,7 +4370,9 @@ void CAsm6502::CListing::AddValue(UINT16 val)
 {
 	ASSERT(m_nLine != -1);	// plik musi byæ otwarty
 	TCHAR buf[32];
-	wsprintf(buf,_T("  %04X             "),val);
+	//% Bug Fix 1.2.13.2 - remove extra space from list report
+	//wsprintf(buf,_T("  %04X             "),val);
+	wsprintf(buf,_T("  %04X          "),val);
 	m_Str += buf;
 }
 
@@ -4358,15 +4386,19 @@ void CAsm6502::CListing::AddBytes(UINT16 addr, UINT16 mask, const UINT8 mem[], i
 	{
 		switch ((len-i) % 4)
 		{
+		//% Bug Fix 1.2.13.2 - remove extra space from list report
 		case 1:
-			wsprintf(buf,_T("%04X  %02X           "),int(addr),int(mem[addr & mask]));
+		//	wsprintf(buf,_T("%04X  %02X           "),int(addr),int(mem[addr & mask]));
+			wsprintf(buf,_T("%04X  %02X        "),int(addr),int(mem[addr & mask]));
 			break;
 		case 2:
-			wsprintf(buf,_T("%04X  %02X %02X        "),int(addr),int(mem[addr & mask]),
+		//	wsprintf(buf,_T("%04X  %02X %02X        "),int(addr),int(mem[addr & mask]),
+			wsprintf(buf,_T("%04X  %02X %02X     "),int(addr),int(mem[addr & mask]),
 				int(mem[addr+1 & mask]));
 			break;
 		case 3:
-			wsprintf(buf,_T("%04X  %02X %02X %02X     "),int(addr),int(mem[addr & mask]),
+		//	wsprintf(buf,_T("%04X  %02X %02X %02X     "),int(addr),int(mem[addr & mask]),
+			wsprintf(buf,_T("%04X  %02X %02X %02X  "),int(addr),int(mem[addr & mask]),
 				int(mem[addr+1 & mask]),int(mem[addr+2 & mask]));
 			break;
 		case 0:
@@ -4393,8 +4425,18 @@ CAsm6502::CListing::CListing(const TCHAR *fname)
 	if (fname && *fname)
 	{
 		Open(fname);
-		m_nLine = 0;
+		//% Bug fix 1.2.14.2 - bad listing file crashes system ---------------------------
+		if (m_nLine)
+			m_nLine = 0;
+		else
+		{
+			m_nLine = -1;
+			CString cs;
+			cs.Format("Listing file name or file path trouble.  No listing file will be generated.\n\nPlease go to Assembler Options to correct it.");
+			MessageBoxA(NULL, cs, "Warning", MB_OK );
+		}
 	}
-	else
+	else 
 		m_nLine = -1;
+	//------------------------------------------------------------------------------------
 }

@@ -22,7 +22,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 //
 
 #include "stdafx.h"
-//#include "6502.h"
 #include "MainFrm.h"
 #include "DialAsmStat.h"
 #include "Options.h"
@@ -31,7 +30,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "LoadCode.h"
 #include "Deasm6502View.h"
 #include "Splash.h"
-#include "AFXPRIV.H"	// do podmiany LoadBarState()
+#include "AFXPRIV.H"	// to replace LoadBarState()
 #include "6502View.h"
 #include "6502Doc.h"
 #include "IntRequestGeneratorDlg.h"
@@ -44,11 +43,11 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 static char THIS_FILE[] = __FILE__;
 #endif
 //-----------------------------------------------------------------------------
-// okna MainFrame, RegisterBar, IOWindow, MemoryView, ZeroPageView, IdentInfo
+// Windows MainFrame, RegisterBar, IOWindow, MemoryView, ZeroPageView, IdentInfo
 const HWND * /*const*/ CMainFrame::m_hWindows[]= {0,0,0,0,0,0,0,0,0,0};
 
 WNDPROC CMainFrame::m_pfnOldProc;
-CBitmap CMainFrame::m_bmpCode;		// obrazki w StatusBar
+CBitmap CMainFrame::m_bmpCode;		// pictures in StatusBar
 CBitmap CMainFrame::m_bmpDebug;
 //-----------------------------------------------------------------------------
 const TCHAR CMainFrame::REG_ENTRY_LAYOUT[]= _T("Bars\\Layout");
@@ -177,7 +176,7 @@ void CMainFrame::ConfigSettings(bool load)
 
 	CWinApp *pApp = AfxGetApp();
 
-	if (load)		// odczyt?
+	if (load)		// reading?
 	{
 		theApp.m_global.SetSymFinish( (CAsm::Finish)(pApp->GetProfileInt(ENTRY_SYM, SYM_FIN, 0)) );
 		CSym6502::io_addr    = pApp->GetProfileInt(ENTRY_SYM, SYM_IO_ADDR, 0xE000);
@@ -260,9 +259,9 @@ void CMainFrame::ConfigSettings(bool load)
 
 //    CMemoryInfo::m_bHidden = pApp->GetProfileInt(ENTRY_VIEW, VIEW_MEMO_HID, false) != 0;
 
-		for (int i=0; fonts[i]; i++)	// odczyt info o fontach w programie
+		for (int i=0; fonts[i]; i++)	// reading info about fonts in the program
 		{
-			*fonts[i] = LogFont;	// domyœlny font
+			*fonts[i] = LogFont;	// default font
 			LPBYTE ptr= NULL;
 			UINT bytes= sizeof *fonts[i];
 			pApp->GetProfileBinary(ENTRY_VIEW, idents[i], &ptr, &bytes);
@@ -272,7 +271,7 @@ void CMainFrame::ConfigSettings(bool load)
 					memcpy(fonts[i], ptr, sizeof *fonts[i]);
 				delete [] ptr;
 			}
-			static const COLORREF defaults[]=	      // domyœlne kolory t³a dla okien
+			static const COLORREF defaults[]=	      // default background colors for windows
 			{ // VIEW_ED_BCOL, VIEW_SYM_BCOL, VIEW_DEASM_BCOL, VIEW_MEMO_BCOL, VIEW_ZERO_BCOL
 				RGB(255,255,255), RGB(255,255,224), RGB(255,255,255),
 					RGB(240,255,240), RGB(255,240,240), RGB(255,255,255), RGB(240,240,240)
@@ -290,7 +289,7 @@ void CMainFrame::ConfigSettings(bool load)
     //    pApp->GetProfileInt(ENTRY_ASM,ASM_CASE,1);
 
 	}
-	else			// zapis
+	else			// record
 	{
 		pApp->WriteProfileInt(ENTRY_SYM, SYM_FIN, theApp.m_global.GetSymFinish());
 		pApp->WriteProfileInt(ENTRY_SYM, SYM_IO_ADDR, CSym6502::io_addr);
@@ -390,7 +389,6 @@ IMPLEMENT_DYNAMIC(CMainFrame, CMDIFrameWnd)
 #pragma warning(disable: 4407)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
-	//{{AFX_MSG_MAP(CMainFrame)
 	ON_WM_CREATE()
 	ON_WM_CLOSE()
 	ON_COMMAND(ID_SYM_ASSEMBLE, OnAssemble)
@@ -462,12 +460,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CMDIFrameWnd)
 	ON_UPDATE_COMMAND_UI(ID_VIEW_LOG, OnUpdateViewLog)
 	ON_COMMAND(ID_HELP_DYNAMIC, OnHelpDynamic)
 	ON_UPDATE_COMMAND_UI(ID_HELP_DYNAMIC, OnUpdateHelpDynamic)
-	//}}AFX_MSG_MAP
-	// Global help commands
-	ON_COMMAND(ID_HELP_FINDER, CMDIFrameWnd::OnHelpFinder)
-	ON_COMMAND(ID_HELP, CMDIFrameWnd::OnHelp)
-//  ON_COMMAND(ID_CONTEXT_HELP, CMDIFrameWnd::OnContextHelp)
-	ON_COMMAND(ID_DEFAULT_HELP, CMDIFrameWnd::OnHelpFinder)
+	ON_COMMAND(ID_HELP_FINDER, OnHtmlHelp)   //% Bug fix 1.2.14.1 - convert to HTML help
+    ON_COMMAND(ID_HELP, OnHtmlHelp)          //% Bug fix 1.2.14.1 - convert to HTML help
+    ON_COMMAND(ID_DEFAULT_HELP, OnHtmlHelp)  //% Bug fix 1.2.14.1 - convert to HTML help
 	ON_MESSAGE(WM_USER+9998, OnUpdateState)
 	ON_MESSAGE(CBroadcast::WM_USER_START_DEBUGGER, OnStartDebugger)
 	ON_MESSAGE(CBroadcast::WM_USER_EXIT_DEBUGGER, OnExitDebugger)
@@ -495,7 +490,7 @@ static UINT indicators[] =
 CMainFrame::CMainFrame()
 {
 	// TODO: add member initialization code here
-	m_nLastPage = 0;	// ostatnio wywo³ana strona (zak³adka) w pude³ku opcji
+	m_nLastPage = 0;	// the last page called up (tab) in the options box
 
 	int i= 0;
 	m_hWindows[i++] = &m_hWnd;
@@ -575,7 +570,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		return -1;      // fail to create
 	}
 
-	{		// dodanie pola do wyœwietlania aktualnego wiersza i kolumny
+	{		// adding a field to display the current row and column
 		UINT uID;
 		UINT uStyle;
 		int nWidth;
@@ -660,14 +655,14 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		{
 			CControlBarInfo* pInfo= (CControlBarInfo*)(state.m_arrBarInfo[i]);
 			if (pInfo->m_nBarID == ID_VIEW_REGISTERBAR)
-				pInfo->m_bVisible = false;	// registerBar zawsze ukryty po starcie aplikacji
+				pInfo->m_bVisible = false;	// registerBar always hidden after application start
 		}
 		bEmptyInfo = state.m_arrBarInfo.GetSize() == 0;
 		SetDockState(state);
 	}
-	if (bEmptyInfo)		// pierwsze uruchomienie aplikacji w systemie?
+	if (bEmptyInfo)		// first launch of the application in the system?
 	{
-		CPoint point(32,32);	// pocz¹tkowe po³o¿enie
+		CPoint point(32,32);	// original position
 		CMiniDockFrameWnd* pDockFrame = CreateFloatingFrame(CBRS_ALIGN_TOP);
 		ASSERT(pDockFrame != NULL);
 		pDockFrame->SetWindowPos(NULL, point.x, point.y, 0, 0,
@@ -692,7 +687,7 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 		m_wndRegisterBar.ModifyStyle(WS_VISIBLE,0);
 	}
 
-	for (int i =0; cfonts[i]; i++)	// utworzenie fontów
+	for (int i =0; cfonts[i]; i++)	// creating fonts
 	{
 		//    cfonts[i]->DeleteObject();
 		cfonts[i]->CreateFontIndirect(fonts[i]);
@@ -2040,7 +2035,12 @@ void CMainFrame::OnUpdateSymGenReset(CCmdUI* pCmdUI)
 	UpdateSymGenInterrupt(pCmdUI);
 }
 
-
+//% Bug fix 1.2.14.1 - convert to HTML help ------------------------------------------
+void CMainFrame::OnHtmlHelp ()
+{
+	HtmlHelpA(NULL, HH_DISPLAY_TOPIC);
+}
+//------------------------------------------------------------------------------------
 void CALLBACK EXPORT TimerProc(
 	HWND hWnd,		// handle of CWnd that called SetTimer
 	UINT nMsg,		// WM_TIMER

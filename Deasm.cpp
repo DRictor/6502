@@ -105,7 +105,7 @@ CString CDeasm::DeasmInstr(const CContext& ctx, DeasmFmt flags, int& ptr)
 	}
 
 	bool b6502= theApp.m_global.m_bProc6502 && !(flags & DF_65C02);
-	str += Mnemonic(cmd, b6502);
+	str += Mnemonic(cmd, b6502, 1); //% Bug fix 1.2.12.2 - allow BRK vs. .DB in disassembly listings
 
 	str += Argument(cmd, (CodeAdr)CodeToMode(b6502)[cmd], addr, ctx.mem[addr+1], ctx.mem[addr+2], flags & DF_LABELS);
 

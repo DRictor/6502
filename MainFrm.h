@@ -57,7 +57,6 @@ class CMainFrame : public CMDIFrameWnd, virtual CBroadcast, CConfigSettings
 	int RedrawAllViews(int chgHint= 0);
 	int Options(int page);
 	int m_nLastPage;
-
 	void ConfigSettings(bool load);
 	void ExitDebugMode();
 
@@ -190,6 +189,7 @@ protected:
 	afx_msg void OnUpdateSymGenNMI(CCmdUI* pCmdUI);
 	afx_msg void OnSymGenReset();
 	afx_msg void OnUpdateSymGenReset(CCmdUI* pCmdUI);
+	afx_msg void CMainFrame::OnHtmlHelp();  //% Bug fix 1.2.14.1 - convert to HTML help 
 	afx_msg void OnSymGenIntDlg();
 	afx_msg void OnUpdateSymGenIntDlg(CCmdUI* pCmdUI);
 	afx_msg void OnViewLog();

@@ -110,7 +110,6 @@ public:
 		ERR_NO_RANGE,				// expected valid range: first value has to be less than or equal to snd value
 		ERR_NUM_ZERO,				// expected nonzero value
 //		ERR_PARAMTYPE_NOT_IN_MACRO,	// .PARAMTYPE can only be used inside macro
-
 		ERR_LAST					// ostatnia wartoœæ typu Stat - nie b³¹d
 	};
 

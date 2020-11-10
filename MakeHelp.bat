@@ -23,7 +23,7 @@ REM -- Make help for Project 6502
 
 
 echo Building Win32 Help files
-start /wait hcrtf -x "hlp\6502.hpj"
+start /wait d:\design\help\hcrtf -x "hlp\6502.hpj"
 echo.
 if exist Debug\nul copy "hlp\6502.hlp" Debug
 if exist Debug\nul copy "hlp\6502.cnt" Debug

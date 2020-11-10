@@ -23,7 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "stdafx.h"
 //#include "6502.h"
-
 #include "MainFrm.h"
 #include "ChildFrm.h"
 #include "ChildFrmDeAsm.h"
@@ -83,6 +82,22 @@ bool C6502App::m_bFileNew= true;	// flaga - owieranie pustego dokumentu przy sta
 
 BOOL C6502App::InitInstance()
 {
+  //% Bug fix 1.2.14.1 - convert to HTML help ------------------------------------------
+  //override old WinHelp
+  //Change the name of the help file.
+
+  CString strHelpFile = m_pszHelpFilePath;
+  strHelpFile = strHelpFile.Left(strHelpFile.GetLength()-4) + ".chm";
+
+  //First free the string allocated by MFC at CWinApp startup.
+  //The string is allocated before InitInstance is called.
+  
+  free((void*)m_pszHelpFilePath);
+
+  // set new help file path
+  m_pszHelpFilePath = _tcsdup(strHelpFile);
+	
+  //-------------------------------------------------------------------------------------
   // wczytanie zasobów
   m_hInstRes = LoadLibrary("Res.dll");
   if (m_hInstRes == NULL)

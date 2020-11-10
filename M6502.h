@@ -943,7 +943,7 @@ class CAsm6502 : public CAsm, public CObject
 		int m_nLine;		// bie¿¹cy wiersz
 
 		void Open(const TCHAR *fname)
-		{ m_File.Open(fname,CFile::modeCreate|CFile::modeWrite|CFile::typeText); }
+		{ m_nLine = m_File.Open(fname,CFile::modeCreate|CFile::modeWrite|CFile::typeText); }
 		void Close()
 		{ m_File.Close(); }
 	public:

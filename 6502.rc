@@ -1600,7 +1600,7 @@ STYLE WS_CHILD | WS_DISABLED | WS_CAPTION
 CAPTION "Simulator"
 FONT 8, "MS Sans Serif"
 BEGIN
-    GROUPBOX        "Finishing running program by",IDC_OPT_SYM_FIN,8,4,108,
+    GROUPBOX        "Finishing running program by",IDC_STATIC,8,4,108,
                     49
     CONTROL         "&BRK instruction",IDC_OPT_SYM_FIN_BRK,"Button",
                     BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,16,15,65,10
@@ -2791,6 +2791,7 @@ BEGIN
     IDS_ASM_ERR_55          "Input line exeeds 1024 characters limit"
     IDS_ASM_ERR_56          "Missing macro parameter name"
     IDS_ASM_ERR_57          "Indirect postindexed addressing mode requires byte operand"
+
 END
 
 STRINGTABLE DISCARDABLE 
