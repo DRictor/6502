@@ -28,8 +28,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define _SCL_SECURE_NO_WARNINGS
 #define _CRT_SECURE_NO_WARNINGS
 
-#define WINVER 0x501
-
+#define WINVER 0xA00
 
 #include <afxwin.h>         // MFC core and standard components
 #include <afxext.h>         // MFC extensions

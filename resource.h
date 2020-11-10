@@ -256,12 +256,12 @@
 #define IDC_OPT_ASM_CASE_Y              2301
 #define IDC_OPT_SYM_IO_ENABLE           2302
 #define IDC_OPT_ED_AUTO_SYNTAX          2303
-#define IDC_OPT_DA_CODE                 2304
+#define IDC_OPT_DA_CODE                 2204
 #define IDC_OPT_ASM_CASE_N              2304
 #define IDC_OPT_SYM_IO_ADDR             2305
-#define IDC_OPT_ED_AUTO_UPPER_CASE      2306
+#define IDC_OPT_ED_AUTO_UPPER_CASE      2206
 #define IDC_OPT_SYM_PROT_FROM           2306
-#define IDC_OPT_ED_NEW_FILE             2307
+#define IDC_OPT_ED_NEW_FILE             2207
 #define IDC_OPT_SYM_PROT_TO             2307
 #define IDC_OPT_BUS_SPIN                2308
 #define IDC_OPT_BUS_WIDTH               2309
@@ -272,7 +272,7 @@
 #define IDC_OPT_ED_TAB_STEP             2314
 #define IDC_OPT_SYM_FONT_BTN            2315
 #define IDC_OPT_ED_AUTO_INDENT          2316
-#define IDC_OPT_SYM_FONT_NAME           2317
+#define IDC_OPT_SYM_FONT_NAME           2217
 #define IDC_OPT_ED_COLOR_SYNTAX         2317
 #define IDC_OPT_SYM_FIN_BRK             2318
 #define IDC_OPT_SYM_FIN_RTS             2319
