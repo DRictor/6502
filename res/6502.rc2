@@ -34,7 +34,7 @@ IDR_SRC65TYPE           ICON    DISCARDABLE     "res\\6502_source.ico"
 
 VS_VERSION_INFO VERSIONINFO
  FILEVERSION 1,0,0,1
- PRODUCTVERSION 1,2,12,0
+ PRODUCTVERSION 1,2,15,0
  FILEFLAGSMASK 0x3fL
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -51,15 +51,15 @@ BEGIN
         BEGIN
             VALUE "Comments", "6502.exe english resources\0"
             VALUE "CompanyName", "MiKSoft\0"
-            VALUE "FileDescription", "resources\0"
+            VALUE "FileDescription", "6502\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"
-            VALUE "InternalName", "res.dll\0"
+            VALUE "InternalName", "6502.exe\0"
             VALUE "LegalCopyright", "Copyright © 1996-2012 Michal Kowalski\0"
             VALUE "LegalTrademarks", "\0"
-            VALUE "OriginalFilename", "res.dll\0"
+            VALUE "OriginalFilename", "6502.exe\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "res\0"
-            VALUE "ProductVersion", "1, 2, 12, 0\0"
+            VALUE "ProductName", "6502\0"
+            VALUE "ProductVersion", "1, 2, 15, 0\0"
             VALUE "SpecialBuild", "\0"
         END
     END
