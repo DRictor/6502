@@ -94,7 +94,7 @@ IMPLEMENT_DYNAMIC(CSaveCode, CFileDialog)
 CSaveCode::CSaveCode(LPCTSTR lpszFileName, LPCTSTR lpszFilter, CWnd* pParentWnd)
  : CFileDialog(FALSE, _T(""), lpszFileName,
     OFN_ENABLETEMPLATE | OFN_ENABLEHOOK | OFN_EXPLORER | OFN_NOREADONLYRETURN |
-    OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY, lpszFilter, pParentWnd, 0, false)
+    OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY, lpszFilter, pParentWnd, 0) //, false) //% Removed to compile correctly
 {
   m_ofn.lpTemplateName = MAKEINTRESOURCE(IDD_SAVE_CODE);
   m_ofn.hInstance = AfxGetResourceHandle();
