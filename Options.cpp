@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #include "Options.h"
 #include "ConfigSettings.h"
 
-static const char *HELP_FILE_6502= "6502.hlp";
+//static const char *HELP_FILE_6502= "6502.txt";
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,6 +35,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 extern void AFX_CDECL DDX_HexDec(CDataExchange* pDX, int nIDC, unsigned int &num, bool bWord= true);
+
+static HH_POPUP hPop;
 
 /////////////////////////////////////////////////////////////////////////////
 // COptions
@@ -65,6 +67,21 @@ COptions::COptions(CWnd* pParentWnd, UINT iSelectPage)
 	AddPage(&m_MarksPage);
 	AddPage(&m_ViewPage);
 	m_nLastActivePageIndex = iSelectPage;
+
+
+        // set up HH_POPUP defaults for all context sensitive help
+	// Initialize structure to NULLs    
+  	memset(&hPop, 0, sizeof(hPop)); 
+  	// Set size of structure
+  	hPop.cbStruct         = sizeof(hPop);        
+  	hPop.clrBackground    = RGB(255, 255, 208);    // Yellow background color
+  	hPop.clrForeground    = -1; // Font color             //  black font	
+  	hPop.rcMargins.top   = -1;             
+  	hPop.rcMargins.left   = -1;             
+  	hPop.rcMargins.bottom = -1;
+  	hPop.rcMargins.right  = -1;
+  	hPop.pszFont          = NULL; 		           // Font
+
 }
 
 COptions::~COptions()
@@ -86,12 +103,11 @@ int COptions::GetLastActivePage()
 	return m_nLastActivePageIndex;
 }
 
-
 BEGIN_MESSAGE_MAP(COptions, CPropertySheet)
-	//{{AFX_MSG_MAP(COptions)
+	
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -110,7 +126,6 @@ IMPLEMENT_DYNCREATE(COptionsSymPage, CPropertyPage)
 
 COptionsSymPage::COptionsSymPage() : CPropertyPage(COptionsSymPage::IDD)
 {
-	//{{AFX_DATA_INIT(COptionsSymPage)
 	m_nIOAddress = 0;
 	m_bIOEnable = FALSE;
 	m_nFinish = -1;
@@ -119,7 +134,6 @@ COptionsSymPage::COptionsSymPage() : CPropertyPage(COptionsSymPage::IDD)
 	m_bProtectMemory = FALSE;
 	m_nProtFromAddr = 0;
 	m_nProtToAddr = 0;
-	//}}AFX_DATA_INIT
 }
 
 COptionsSymPage::~COptionsSymPage()
@@ -163,13 +177,13 @@ void COptionsSymPage::DoDataExchange(CDataExchange* pDX)
 	}
 
 	CPropertyPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COptionsSymPage)
+	
 	DDX_Check(pDX, IDC_OPT_SYM_IO_ENABLE, m_bIOEnable);
 	DDX_Radio(pDX, IDC_OPT_SYM_FIN_BRK, m_nFinish);
 	DDX_Text(pDX, IDC_OPT_SYM_IO_WND_W, m_nWndWidth);
 	DDX_Text(pDX, IDC_OPT_SYM_IO_WND_H, m_nWndHeight);
 	DDX_Check(pDX, IDC_OPT_SYM_PROTECT_MEM, m_bProtectMemory);
-	//}}AFX_DATA_MAP
+	
 	DDX_HexDec(pDX, IDC_OPT_SYM_IO_ADDR, m_nIOAddress);
 	DDV_MinMaxUInt(pDX, m_nIOAddress, 0, 65535);
 	DDX_HexDec(pDX, IDC_OPT_SYM_PROT_FROM, m_nProtFromAddr);
@@ -180,10 +194,10 @@ void COptionsSymPage::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(COptionsSymPage, CPropertyPage)
-	//{{AFX_MSG_MAP(COptionsSymPage)
+	
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
-	//}}AFX_MSG_MAP
+	
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -198,14 +212,14 @@ IMPLEMENT_DYNCREATE(COptionsEditPage, CPropertyPage)
 
 COptionsEditPage::COptionsEditPage() : CPropertyPage(COptionsEditPage::IDD)
 {
-	//{{AFX_DATA_INIT(COptionsEditPage)
+	
 	m_bAutoIndent = FALSE;
 	m_nTabStep = 0;
 	m_bAutoSyntax = FALSE;
 	m_bAutoUppercase = FALSE;
 	m_bFileNew = FALSE;
 	m_nElement = 0;
-	//}}AFX_DATA_INIT
+	
 	m_bColorChanged = false;
 }
 
@@ -223,7 +237,7 @@ void COptionsEditPage::DoDataExchange(CDataExchange* pDX)
     pTab->SetRange(2,32);		// krok tabulatora z zakresu 2..32
   }
   CPropertyPage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(COptionsEditPage)
+  
 	DDX_Control(pDX, IDC_OPT_ED_BOLD_FONT, m_btnBold);
 	DDX_Control(pDX, IDC_OPT_ED_COLOR, m_btnColor);
 	DDX_Control(pDX, IDC_OPT_ED_ELEMENT, m_wndElement);
@@ -235,12 +249,12 @@ void COptionsEditPage::DoDataExchange(CDataExchange* pDX)
 	DDX_Check(pDX, IDC_OPT_ED_AUTO_UPPER_CASE, m_bAutoUppercase);
 	DDX_Check(pDX, IDC_OPT_ED_NEW_FILE, m_bFileNew);
 	DDX_CBIndex(pDX, IDC_OPT_ED_ELEMENT, m_nElement);
-	//}}AFX_DATA_MAP
+	
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsEditPage, CPropertyPage)
-	//{{AFX_MSG_MAP(COptionsEditPage)
+	
 	ON_WM_HELPINFO()
 	ON_WM_CONTEXTMENU()
 	ON_EN_CHANGE(IDC_OPT_ED_TAB_STEP, OnChangeTabStep)
@@ -248,7 +262,7 @@ BEGIN_MESSAGE_MAP(COptionsEditPage, CPropertyPage)
 	ON_CBN_SELCHANGE(IDC_OPT_ED_ELEMENT, OnSelChangeElement)
 	ON_BN_CLICKED(IDC_OPT_ED_COLOR, OnEditColor)
 	ON_BN_CLICKED(IDC_OPT_ED_BOLD_FONT, OnBoldFont)
-	//}}AFX_MSG_MAP
+	
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -391,14 +405,14 @@ IMPLEMENT_DYNCREATE(COptionsAsmPage, CPropertyPage)
 
 COptionsAsmPage::COptionsAsmPage() : CPropertyPage(COptionsAsmPage::IDD)
 {
-  //{{AFX_DATA_INIT(COptionsAsmPage)
+  
   m_nCaseSensitive = -1;
   m_nAsmInstrWithDot = -1;
   m_bGenerateListing = FALSE;
   m_strListingFile = _T("");
   m_bGenerateBRKExtraByte = FALSE;
   m_uBrkExtraByte = 0;
-  //}}AFX_DATA_INIT
+  
 }
 
 COptionsAsmPage::~COptionsAsmPage()
@@ -408,25 +422,23 @@ COptionsAsmPage::~COptionsAsmPage()
 void COptionsAsmPage::DoDataExchange(CDataExchange* pDX)
 { 
   CPropertyPage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(COptionsAsmPage)
+  
   DDX_Radio(pDX, IDC_OPT_ASM_CASE_Y, m_nCaseSensitive);
   DDX_Radio(pDX, IDC_OPT_ASM_INSTR_DOT, m_nAsmInstrWithDot);
   DDX_Check(pDX, IDC_OPT_ASM_GENERATE_LIST, m_bGenerateListing);
   DDX_Text(pDX, IDC_OPT_ASM_FILE_LISTING, m_strListingFile);
   DDX_Check(pDX, IDC_OPT_ASM_GENERATE_BYTE, m_bGenerateBRKExtraByte);
-  //}}AFX_DATA_MAP
-//  DDX_Text(pDX, IDC_OPT_ASM_EXTRA_BYTE, m_uBrkExtraByte);
   DDX_HexDec(pDX, IDC_OPT_ASM_EXTRA_BYTE, m_uBrkExtraByte, false);
   DDV_MinMaxUInt(pDX,m_uBrkExtraByte,0,0xFF);
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsAsmPage, CPropertyPage)
-  //{{AFX_MSG_MAP(COptionsAsmPage)
+  
   ON_WM_HELPINFO()
   ON_WM_CONTEXTMENU()
   ON_BN_CLICKED(IDC_OPT_ASM_CHOOSE_FILE, OnOptAsmChooseFile)
-  //}}AFX_MSG_MAP
+  
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -440,9 +452,7 @@ IMPLEMENT_DYNCREATE(COptionsDeasmPage, CPropertyPage)
 
 COptionsDeasmPage::COptionsDeasmPage() : CPropertyPage(COptionsDeasmPage::IDD)
 {
-  //{{AFX_DATA_INIT(COptionsDeasmPage)
   m_ShowCode = FALSE;
-  //}}AFX_DATA_INIT
   m_bSubclassed = FALSE;
   m_bColorChanged = FALSE;
 }
@@ -454,19 +464,17 @@ COptionsDeasmPage::~COptionsDeasmPage()
 void COptionsDeasmPage::DoDataExchange(CDataExchange* pDX)
 {
   CPropertyPage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(COptionsDeasmPage)
   DDX_Check(pDX, IDC_OPT_DA_CODE, m_ShowCode);
-  //}}AFX_DATA_MAP
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsDeasmPage, CPropertyPage)
-  //{{AFX_MSG_MAP(COptionsDeasmPage)
+
   ON_BN_CLICKED(IDC_OPT_DA_ADDR_COL, OnAddrColButton)
   ON_BN_CLICKED(IDC_OPT_DA_CODE_COL, OnCodeColButton)
   ON_WM_HELPINFO()
   ON_WM_CONTEXTMENU()
-  //}}AFX_MSG_MAP
+
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -504,8 +512,6 @@ BOOL COptionsDeasmPage::OnSetActive()
     m_ColorButtonAddress.SetColorRef(&m_rgbAddress);
     m_ColorButtonCode.SubclassDlgItem(IDC_OPT_DA_CODE_COL,this);
     m_ColorButtonCode.SetColorRef(&m_rgbCode);
-//    m_ColorButtonInstr.SubclassDlgItem(IDC_OPT_DA_INSTR_COL,this);
-//    m_ColorButtonInstr.SetColorRef(&m_rgbInstr);
     m_bSubclassed = TRUE;
   }
   return CPropertyPage::OnSetActive();
@@ -518,10 +524,8 @@ IMPLEMENT_DYNCREATE(COptionsMarksPage, CPropertyPage)
 
 COptionsMarksPage::COptionsMarksPage() : CPropertyPage(COptionsMarksPage::IDD)
 {
-  //{{AFX_DATA_INIT(COptionsMarksPage)
   m_nProc6502 = -1;
   m_uBusWidth = 16;
-	//}}AFX_DATA_INIT
   m_bSubclassed = FALSE;
   m_bColorChanged = FALSE;
   m_bFontChanged = FALSE;
@@ -542,23 +546,23 @@ void COptionsMarksPage::DoDataExchange(CDataExchange* pDX)
   }
 
   CPropertyPage::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(COptionsMarksPage)
+  
   DDX_Radio(pDX, IDC_OPT_6502, m_nProc6502);
   DDX_Text(pDX, IDC_OPT_BUS_WIDTH, m_uBusWidth);
   DDV_MinMaxUInt(pDX, m_uBusWidth, 10, 16);
-  //}}AFX_DATA_MAP
+  
 }
 
 
 BEGIN_MESSAGE_MAP(COptionsMarksPage, CPropertyPage)
-  //{{AFX_MSG_MAP(COptionsMarksPage)
+  
   ON_BN_CLICKED(IDC_OPT_MARK_BRKP_COL, OnBrkpColButton)
   ON_BN_CLICKED(IDC_OPT_MARK_ERR_COL, OnErrColButton)
   ON_BN_CLICKED(IDC_OPT_MARK_PTR_COL, OnPtrColButton)
   ON_WM_HELPINFO()
   ON_WM_CONTEXTMENU()
   ON_BN_CLICKED(IDC_OPT_FONT_BTN, OnOptFontBtn)
-  //}}AFX_MSG_MAP
+  
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -625,154 +629,111 @@ void COptionsMarksPage::OnOptFontBtn()
   }
 }
 
-
-DWORD COptions::m_arrIds[]=
-{
-  IDC_OPT_SYM_FIN_BRK,	      0xA0000 + IDC_OPT_SYM_FIN_BRK,
-  IDC_OPT_SYM_FIN_FF,	      0xA0000 + IDC_OPT_SYM_FIN_FF,
-  IDC_OPT_SYM_FIN_RTS,	      0xA0000 + IDC_OPT_SYM_FIN_RTS,
-  IDC_OPT_SYM_IO_ADDR,	      0xA0000 + IDC_OPT_SYM_IO_ADDR,
-  IDC_OPT_SYM_IO_ENABLE,      0xA0000 + IDC_OPT_SYM_IO_ENABLE,
-  IDC_OPT_SYM_IO_WND_W,       0xA0000 + IDC_OPT_SYM_IO_WND_W,
-  IDC_OPT_SYM_IO_WND_H,	      0xA0000 + IDC_OPT_SYM_IO_WND_H,
-  IDC_OPT_SYM_WND_TXT_COL,    0xA0000 + IDC_OPT_SYM_WND_TXT_COL,
-  IDC_OPT_SYM_WND_BGND_COL,   0xA0000 + IDC_OPT_SYM_WND_BGND_COL,
-  IDC_OPT_SYM_FONT_BTN,	      0xA0000 + IDC_OPT_SYM_FONT_BTN,
-  IDC_OPT_SYM_FONT_NAME,      0xA0000 + IDC_OPT_SYM_FONT_NAME,
-
-  IDC_OPT_ASM_CASE_N,	      0xA0000 + IDC_OPT_ASM_CASE_N,
-  IDC_OPT_ASM_CASE_Y,	      0xA0000 + IDC_OPT_ASM_CASE_Y,
-  IDC_OPT_ASM_INSTR_DOT,      0xA0000 + IDC_OPT_ASM_INSTR_DOT,
-  IDC_OPT_ASM_GENERATE_LIST,  0xA0000 + IDC_OPT_ASM_GENERATE_LIST,
-  IDC_OPT_ASM_FILE_LISTING,   0xA0000 + IDC_OPT_ASM_FILE_LISTING,
-  IDC_OPT_ASM_GENERATE_BYTE,  0xA0000 + IDC_OPT_ASM_GENERATE_BYTE,
-  IDC_OPT_ASM_EXTRA_BYTE,     0xA0000 + IDC_OPT_ASM_EXTRA_BYTE,
-  IDC_OPT_ASM_CHOOSE_FILE,    0xA0000 + IDC_OPT_ASM_CHOOSE_FILE,
-
-  IDC_OPT_DA_ADDR_COL,	      0xA0000 + IDC_OPT_DA_ADDR_COL,
-  IDC_OPT_DA_CODE,	      0xA0000 + IDC_OPT_DA_CODE,
-  IDC_OPT_DA_CODE_COL,	      0xA0000 + IDC_OPT_DA_CODE_COL,
-  IDC_OPT_DA_INSTR_COL,	      0xA0000 + IDC_OPT_DA_INSTR_COL,
-
-  IDC_OPT_ED_AUTO_INDENT,     0xA0000 + IDC_OPT_ED_AUTO_INDENT,
-  IDC_OPT_ED_AUTO_SYNTAX,     0xA0000 + IDC_OPT_ED_AUTO_SYNTAX,
-  IDC_OPT_ED_AUTO_UPPER_CASE, 0xA0000 + IDC_OPT_ED_AUTO_UPPER_CASE,
-  IDC_OPT_ED_FONT_BTN,	      0xA0000 + IDC_OPT_ED_FONT_BTN,
-  IDC_OPT_ED_FONT_NAME,	      0xA0000 + IDC_OPT_ED_FONT_NAME,
-  IDC_OPT_ED_NEW_FILE,	      0xA0000 + IDC_OPT_ED_NEW_FILE,
-  IDC_OPT_ED_TAB_SPIN,	      0xA0000 + IDC_OPT_ED_TAB_STEP,
-  IDC_OPT_ED_TAB_STEP,	      0xA0000 + IDC_OPT_ED_TAB_STEP,
-
-  IDC_OPT_MARK_BRKP_COL,      0xA0000 + IDC_OPT_MARK_BRKP_COL,
-  IDC_OPT_MARK_ERR_COL,	      0xA0000 + IDC_OPT_MARK_ERR_COL,
-  IDC_OPT_MARK_PTR_COL,	      0xA0000 + IDC_OPT_MARK_PTR_COL,
-  IDC_OPT_6502,		      0xA0000 + IDC_OPT_6502,
-  IDC_OPT_65C02,	      0xA0000 + IDC_OPT_65C02,
-  IDC_OPT_BUS_SPIN,	      0xA0000 + IDC_OPT_BUS_WIDTH,
-  IDC_OPT_BUS_WIDTH,	      0xA0000 + IDC_OPT_BUS_WIDTH,
-  0,0
-};
-
-
+// Context Sensitive Help starts here
+//% Bug fix 1.2.14.1 - convert to HTML help ------------------------------------------
 BOOL COptionsSymPage::OnHelpInfo(HELPINFO *pHelpInfo)
 {
-  ::WinHelp(HWND(pHelpInfo->hItemHandle), AfxGetApp()->m_pszHelpFilePath,
-    HELP_WM_HELP, (DWORD)(void*)COptions::m_arrIds);
-
-  return TRUE;
-
-//    case WM_CONTEXTMENU: 
-//        WinHelp((HWND) wParam, "helpfile.hlp", HELP_CONTEXTMENU, 
-//            (DWORD) (LPVOID) aIds); 
-
-//  return CPropertyPage::OnHelpInfo(pHelpInfo);
+	if (pHelpInfo->iCtrlId > 0 )
+	{
+		hPop.pt               = pHelpInfo->MousePos;    
+		hPop.idString         = pHelpInfo->iCtrlId;
+		HtmlHelpA((DWORD)(void*)&hPop, HH_DISPLAY_TEXT_POPUP) ;
+	}
+	return TRUE;
 }
-
 
 BOOL COptionsDeasmPage::OnHelpInfo(HELPINFO* pHelpInfo)
 {
-  ::WinHelp(HWND(pHelpInfo->hItemHandle), AfxGetApp()->m_pszHelpFilePath,
-    HELP_WM_HELP, (DWORD)(void*)COptions::m_arrIds);
-
-  return TRUE;
+	if (pHelpInfo->iCtrlId > 0 )
+	{
+		hPop.pt               = pHelpInfo->MousePos;    
+		hPop.idString         = pHelpInfo->iCtrlId;
+		HtmlHelpA((DWORD)(void*)&hPop, HH_DISPLAY_TEXT_POPUP) ;
+	}
+	return TRUE;
 }
-
 
 BOOL COptionsEditPage::OnHelpInfo(HELPINFO* pHelpInfo)
 {
-  ::WinHelp(HWND(pHelpInfo->hItemHandle), AfxGetApp()->m_pszHelpFilePath,
-    HELP_WM_HELP, (DWORD)(void*)COptions::m_arrIds);
-
-  return TRUE;
+	if (pHelpInfo->iCtrlId > 0 )
+	{
+		hPop.pt               = pHelpInfo->MousePos;    
+		hPop.idString         = pHelpInfo->iCtrlId;
+		HtmlHelpA((DWORD)(void*)&hPop, HH_DISPLAY_TEXT_POPUP) ;
+	}
+	return TRUE;
 }
-
 
 BOOL COptionsMarksPage::OnHelpInfo(HELPINFO* pHelpInfo)
 {
-  ::WinHelp(HWND(pHelpInfo->hItemHandle), AfxGetApp()->m_pszHelpFilePath,
-    HELP_WM_HELP, (DWORD)(void*)COptions::m_arrIds);
-
-  return TRUE;
+	if (pHelpInfo->iCtrlId > 0 )
+	{
+		hPop.pt               = pHelpInfo->MousePos;    
+		hPop.idString         = pHelpInfo->iCtrlId;
+		HtmlHelpA((DWORD)(void*)&hPop, HH_DISPLAY_TEXT_POPUP) ;
+	}
+	return TRUE;
 }
-
 
 BOOL COptionsAsmPage::OnHelpInfo(HELPINFO* pHelpInfo)
 {
-  ::WinHelp(HWND(pHelpInfo->hItemHandle), AfxGetApp()->m_pszHelpFilePath,
-    HELP_WM_HELP, (DWORD)(void*)COptions::m_arrIds);
+	if (pHelpInfo->iCtrlId > 0 )
+	{
+		hPop.pt               = pHelpInfo->MousePos;    
+		hPop.idString         = pHelpInfo->iCtrlId;
+		HtmlHelpA((DWORD)(void*)&hPop, HH_DISPLAY_TEXT_POPUP) ;
+	}
 
-  return TRUE;
+	//DWORD buf = pHelpInfo->iCtrlId;
+	//CString cs;
+	//cs.Format("%d", buf);
+	//MessageBoxA( cs, "ID", MB_OK );
+	
+	return TRUE;
 }
-
 
 BOOL COptions::OnHelpInfo(HELPINFO* pHelpInfo)
 {	
-  return TRUE;
-//  return CPropertySheet::OnHelpInfo(pHelpInfo);
+	if ( pHelpInfo->iCtrlId > 1000 && pHelpInfo->iCtrlId < 2999 )
+	{
+		hPop.pt               = pHelpInfo->MousePos;    
+		hPop.idString         = pHelpInfo->iCtrlId;
+		HtmlHelpA((DWORD)(void*)&hPop, HH_DISPLAY_TEXT_POPUP) ;
+	}
+    return TRUE;
 }
-
-
 
 void COptionsSymPage::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-  ::WinHelp(pWnd->GetSafeHwnd(), AfxGetApp()->m_pszHelpFilePath,
-    HELP_CONTEXTMENU, (DWORD)(void*)COptions::m_arrIds);
+	HtmlHelpA(59991, HH_HELP_CONTEXT);
 }
-
 
 void COptions::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-  ::WinHelp(pWnd->GetSafeHwnd(), AfxGetApp()->m_pszHelpFilePath,
-    HELP_CONTEXTMENU, (DWORD)(void*)COptions::m_arrIds);
+	HtmlHelpA(NULL, HH_DISPLAY_TOPIC);
 }
-
 
 void COptionsAsmPage::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-  ::WinHelp(pWnd->GetSafeHwnd(), AfxGetApp()->m_pszHelpFilePath,
-    HELP_CONTEXTMENU, (DWORD)(void*)COptions::m_arrIds);
-}
+	HtmlHelpA(59992, HH_HELP_CONTEXT);
 
+}
 
 void COptionsDeasmPage::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-  ::WinHelp(pWnd->GetSafeHwnd(), AfxGetApp()->m_pszHelpFilePath,
-    HELP_CONTEXTMENU, (DWORD)(void*)COptions::m_arrIds);
+	HtmlHelpA(59993, HH_HELP_CONTEXT);
 }
-
 
 void COptionsEditPage::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-  ::WinHelp(pWnd->GetSafeHwnd(), AfxGetApp()->m_pszHelpFilePath,
-    HELP_CONTEXTMENU, (DWORD)(void*)COptions::m_arrIds);
+	HtmlHelpA(59994, HH_HELP_CONTEXT);
 }
-
 
 void COptionsMarksPage::OnContextMenu(CWnd* pWnd, CPoint point)
 {
-  ::WinHelp(pWnd->GetSafeHwnd(), AfxGetApp()->m_pszHelpFilePath,
-    HELP_CONTEXTMENU, (DWORD)(void*)COptions::m_arrIds);
+	HtmlHelpA(59995, HH_HELP_CONTEXT);
 }
+//--------------------------------------------------------------------------------------
 
 
 void COptionsAsmPage::OnOptAsmChooseFile()
